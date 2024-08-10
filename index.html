@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Text-Based Adventure</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #222;
+			color: #ccc;
+			text-align: center;
+			padding: 20px;
+		}
+		#scene-container {
+			margin: 0 auto;
+			max-width: 600px;
+			padding: 20px;
+			background-color: #444;
+			border-radius: 8px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		.scene-image {
+			max-width: 100%;
+			height: auto;
+			margin: 20px 0;
+		}
+		.choice-button {
+			display: block;
+			width: 100%;
+			margin: 10px 0;
+			padding: 10px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		.choice-button:hover {
+			background-color: #0056b3;
+		}
+		select {
+			background-color: #ccc;
+			color: #333;
+		}
+		label {
+			color: #ccc;
+		}
+		input[type="submit"] {
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		input[type="submit"]:hover {
+			background-color: #0056b3;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<label for="db">Select a story:</label>
+		<select name="db" id="db">
+			<option value="explorer.db">Explorer</option>
+		</select>
+		<input type="submit" value="Submit">
+	</form>
+	<div id="scene-container">
+		<div id="scene-text"></div>
+		<div id="images-container"></div>
+		<div id="choices-container"></div>
+	</div>
+	<script>
+		let currentScene = 'start';
+		let db = new URLSearchParams(window.location.search).get('db');
+
+		function fetchScene(tag) {
+			if (db != new URLSearchParams(window.location.search).get('db')) {
+				db = new URLSearchParams(window.location.search).get('db');
+				currentScene = 'start';
+			}
+			fetch(`./get_scene.php?tag=${tag}&db=${db}`)
+				.then(response => response.json())
+				.then(data => displayScene(data))
+				.catch(error => console.error('Error:', error));
+		}
+
+		function displayScene(scene) {
+			window.scrollTo(0, 0);
+			let text = scene.text;
+			const images = scene.images;
+			let newText = text;
+			newText = newText.replace(/\"(.*?)\"/g, '<span style="color: orange;">"$1"</span>');
+			newText = newText.replace(/<br>/g, '<br><br>');
+			newText = newText.replace(/<b>(.*?)<\/b>/g, '<span style="font-weight: bold;">$1</span>');
+			newText = newText.replace(/<i>(.*?)<\/i>/g, '<span style="font-style: italic;">$1</span>');
+
+			let imageIndex = 0;
+			newText = newText.replace(/<image>/g, () => {
+				const imgTag = `<img class="scene-image" src="data:image/png;base64, ${images[imageIndex]}" alt="Scene Image" />`;
+				imageIndex++;
+				return imgTag;
+			});
+			document.getElementById('scene-text').innerHTML = newText;
+			updateChoices(scene.choices);
+		}
+
+		function updateChoices(choices) {
+			const choicesContainer = document.getElementById('choices-container');
+			choicesContainer.innerHTML = '';
+			if (choices.length === 0) {
+				const button = document.createElement('button');
+				button.className = 'choice-button';
+				button.innerText = 'Restart';
+				button.onclick = () => fetchScene('start');
+				choicesContainer.appendChild(button);
+			} else {
+				choices.forEach(choice => {
+					const button = document.createElement('button');
+					button.className = 'choice-button';
+					button.innerText = choice.description;
+					button.onclick = () => fetchScene(choice.next_scene_tag);
+					choicesContainer.appendChild(button);
+				});
+			}
+		}
+
+		fetchScene(currentScene);
+	</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+scene:start
+text:<image><br>You're exploring a local rainforest and come across a waterfall.
+choices:
+swim:Go for a swim in the water
+hike:Hike past the waterfall
+
+scene:swim
+text:<image><br>You decide to take a swim in the water! You take off your shirt and jump into the water. It's very refreshing and as you're splashing water on your face to cool yourself down, you feel something swim by you in the water.<br>You dip your head under the water and see a <b>CROCODILE</b> staring back at you. You immediately try swimming towards the shore, but the crocodile gets a hold of your leg and drags you under. You are dead.
+
+scene:hike
+text:<image><br>You decide to continue to hike on and not cool down. You hike for 5 miles and then you come across yet <b>ANOTHER</b> waterfall.
+choices:
+swim:Go for a swim in the water
+hike:Hike past the waterfall

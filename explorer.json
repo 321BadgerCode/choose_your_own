@@ -1,0 +1,49 @@
+{
+	"scenes": {
+		"start": {
+			"text": "<image><br><image><br>You're exploring a local rainforest and come across a waterfall.<image><br>",
+			"images": [
+				"./stories/explorer/rainforest.png",
+				"./stories/explorer/explorer.png",
+				"./stories/explorer/waterfall.png"
+			],
+			"choices": [
+				{
+					"description": "Go for a swim in the water",
+					"next_scene": "swim"
+				},
+				{
+					"description": "Hike past the waterfall",
+					"next_scene": "hike"
+				}
+			]
+		},
+		"swim": {
+			"text": "<image><br>You decide to take a swim in the water! You take off your shirt and jump into the water. It's very refreshing and as you're splashing water on your face to cool yourself down, you feel something swim by you in the water.<br><image><br>You dip your head under the water and see a <b>CROCODILE</b> staring back at you.<br><image><br>You immediately try swimming towards the shore, but the crocodile gets a hold of your leg and drags you under. You are dead.<br><image>",
+			"images": [
+				"./stories/explorer/swim.png",
+				"./stories/explorer/dipping_under.png",
+				"./stories/explorer/see_gator.png",
+				"./stories/explorer/death_by_gator.png"
+			],
+			"choices": []
+		},
+		"hike": {
+			"text": "<image><br>You decide to continue to hike on and not cool down. You hike for 5 miles and then you come across yet <b>ANOTHER</b> waterfall.<br><image>",
+			"images": [
+				"./stories/explorer/hike.png",
+				"./stories/explorer/waterfall.png"
+			],
+			"choices": [
+				{
+					"description": "Go for a swim in the water",
+					"next_scene": "swim"
+				},
+				{
+					"description": "Hike past the waterfall",
+					"next_scene": "hike"
+				}
+			]
+		}
+	}
+}
